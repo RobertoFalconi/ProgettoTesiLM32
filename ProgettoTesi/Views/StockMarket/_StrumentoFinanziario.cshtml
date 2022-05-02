@@ -1,0 +1,58 @@
+﻿@model StrumentoFinanziarioViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<form id="formValidationStrumentoFinanziario">
+    @Html.AntiForgeryToken()
+    <h3><i class="fa-solid fa-table-list"></i> Risultati</h3>
+    <button type="button" class="btn btn-primary mb-2" onclick="addToWatchlist('@Model.Nome');"><i class="fa-solid fa-circle-plus"></i> Aggiungi alla watchlist</button>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <button type="button" class="btn btn-primary mb-2" onclick="addToHoldings('@Model.Nome');"><i class="fa-solid fa-floppy-disk"></i> Aggiungi alle holdings</button>
+    }
+    else
+    {
+        <button type="button" class="btn btn-outline-secondary mb-2" onclick="openMyModal('Attenzione!', 'Devi essere registrato');"><i class="fa-solid fa-floppy-disk"></i> Aggiungi alle holdings</button>
+    }
+    <input hidden name="Nome" value="@Model.Nome" />
+    <input hidden name="Simbolo" value="@Model.Simbolo" />
+    <input hidden name="Descrizione" value="@Model.Descrizione" />
+    <div class="card text-center mb-5 rounded-3 border shadow-lg" id="strumentoFinanziario">
+        <div class="card-header bg-dark-blue bg-gradient">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" href="#!" name="Nome"><i class="fa-solid fa-circle-info"></i> Informazioni di @Model.Nome</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="card col-lg-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="fa-solid fa-sack-dollar"></i> Total Revenue: @Model.TotalRevenue</li>
+                        <li class="list-group-item"><i class="fa-solid fa-hand-holding-dollar"></i> Gross Profits: @Model.GrossProfits</li>
+                        <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced"></i> Profit Margins: @Model.ProfitMargins</li>
+                        <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced-flip"></i> Ebitda Margins: @Model.EbitdaMargins</li>
+                    </ul>
+                </div>
+                <div class="card col-lg-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="fa-solid fa-magnifying-glass-dollar"></i> Current Price: @Model.CurrentPrice</li>
+                        <li class="list-group-item"><i class="fa-solid fa-vault"></i> Target High Price: @Model.TargetHighPrice</li>
+                        <li class="list-group-item"><i class="fa-solid fa-piggy-bank"></i> Target Median Price: @Model.TargetMedianPrice</li>
+                        <li class="list-group-item"><i class="fa-solid fa-coins"></i> Target Low Price: @Model.TargetLowPrice</li>
+                    </ul>
+                </div>
+                <div class="card col-lg-4">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="fa-solid fa-money-bill-trend-up"></i> Earnings Growth: @Model.EarningsGrowth</li>
+                        <li class="list-group-item"><i class="fa-solid fa-money-bill-wheat"></i> Revenue Growth: @Model.RevenueGrowth</li>
+                        <li class="list-group-item"><i class="fa-solid fa-wallet"></i> Operating Cashflow: @Model.OperatingCashflow</li>
+                        <li class="list-group-item"><i class="fa-solid fa-dollar-sign"></i> Financial Currency: @Model.FinancialCurrency</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

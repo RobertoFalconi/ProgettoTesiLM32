@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Cryptocurrencies";
+}
+
+@section scripts {
+<script>
+    function loadListCrypto() {
+        showMySpinner(true);
+        $.get({
+            url: "/Crypto/_ListCrypto",
+            cache: false
+        }).done(function (data) {
+            showMySpinner(false);
+            if (data.success != undefined && !data.success) {
+                openMyModal("Errore",data.errorMsg);
+            }
+            else {
+                $("#divListCrypto").html(data);
+            }
+        }).fail(function (data) {
+        });
+    }
+
+    $(document).ready(function () {
+        loadListCrypto();
+    });
+</script>
+}
+
+<div class="row">
+    <div class="col">
+        <div class="card text-center mb-5 position-static rounded-3 border shadow-lg">
+            <iframe class="mt-n1" id="investing" src="https://it.widgets.investing.com/top-cryptocurrencies?theme=darkTheme&roundedCorners=true" height="461" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divListCrypto"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divMyModal"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divMySpinner" class="text-center" hidden>
+            <div class="spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

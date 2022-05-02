@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  progettotesi.api:
+    image: ${DOCKER_REGISTRY-}progettotesiapi
+    build:
+      context: .
+      dockerfile: ProgettoTesi.Api/Dockerfile
+  progettotesi:
+      image: ${DOCKER_REGISTRY-}progettotesi
+      build:
+        context: .
+        dockerfile: ProgettoTesi/Dockerfile
+  progettotesi.apigateway:
+    image: ${DOCKER_REGISTRY-}progettotesiapigateway
+    build:
+      context: .
+      dockerfile: ProgettoTesi.ApiGateway/Dockerfile

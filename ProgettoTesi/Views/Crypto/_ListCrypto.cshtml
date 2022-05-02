@@ -1,0 +1,36 @@
+﻿@model IReadOnlyList<CryptoViewModel>
+<h3>50 Crypto più attive al momento</h3>
+<a type="button" class="btn btn-primary mb-2" href="/Crypto/Download"><i class="fa-solid fa-download"></i> Download data</a>
+<div class="table-responsive mb-5 rounded-3 border shadow-lg">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Simbolo</th>
+                <th scope="col">Prezzo attuale (USD)</th>
+                <th scope="col">Prezzo attuale (BTC)</th>
+                <th scope="col">Crescita (24 ore)</th>
+                <th scope="col">Variazione (7 giorni)</th>
+                <th scope="col">Capitalizzazione di mercato</th>
+                <th scope="col">Volume scambi (24 ore)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Select((value, index) => new { value, index }))
+            {
+                <tr>
+                    <th scope="row">@(item.index+1)</th>
+                    <td>@item.value.Name</td>
+                    <td>@item.value.Currency_symbol</td>
+                    <td>@item.value.Inst_price_usd</td>
+                    <td>@item.value.Inst_price_btc</td>
+                    <td>@item.value.Change_percent_1d</td>
+                    <td>@item.value.Change_percent_7d</td>
+                    <td>@item.value.Inst_market_cap_plain</td>
+                    <td>@item.value.Volume_24h_usd_plain</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,111 @@
+﻿@using ProgettoTesi.Models
+@model IReadOnlyList<StrumentoFinanziarioViewModel>
+
+@{
+    ViewData["Title"] = "Holdings";
+    TempData["Controller"] = "Holdings";
+}
+
+@section scripts {
+
+<script>
+    function getQuotazione(simbolo) {
+        showMySpinner(true);
+        $.get({
+            url: "/Holdings/_QuotazioneModal" + '?Simbolo=' + simbolo,
+            cache: false
+        }).done(function (data) {
+            showMySpinner(false);
+            if (data.success != undefined && !data.success && data.isFreeCallEnd) {
+                $('#datalistOptions').empty();
+                $('#exampleDataList').attr("readonly", true);
+                $('#btnCerca').attr("disabled", true);
+                $('#triangolo').attr("hidden", false);
+            }
+            else if (data.success != undefined && !data.success && !data.isFreeCallEnd) {
+                openMyModal("Errore", data.errorMsg);
+            }
+            else {
+                $("#divStrumentoFinanziario").html(data);
+            }
+        }).fail(function (data) {
+        });
+    }
+
+    function deleteHoldings(id) {
+        showMySpinner(true);
+        $.get({
+            url: "/Holdings/DeleteHoldings" + '?Id=' + id,
+            cache: false
+        }).done(function (data) {
+            showMySpinner(false);
+            if (data.success != undefined && !data.success && data.isFreeCallEnd) {
+                $('#datalistOptions').empty();
+                $('#exampleDataList').attr("readonly", true);
+                $('#btnCerca').attr("disabled", true);
+                $('#triangolo').attr("hidden", false);
+            }
+            else if (data.success != undefined && !data.success && !data.isFreeCallEnd) {
+                openMyModal("Errore", data.errorMsg);
+            }
+            else {
+                loadHoldingsList();
+                openMyModal("Successo", data.errorMsg);
+            }
+        }).fail(function (data) {
+        });
+    }
+    
+    function loadHoldingsList() {
+        showMySpinner(true);
+        $.get({
+            url: "/Holdings/_HoldingsList",
+            cache: false
+        }).done(function (data) {
+            showMySpinner(false);
+            if (data.success != undefined && !data.success ) {
+                openMyModal("Errore",data.errorMsg);
+            }
+            else {
+                $("#divHoldingsList").html(data);
+            }
+        }).fail(function (data) {
+        });
+    }
+
+    $(document).ready(function () {
+        loadHoldingsList();
+    });
+
+</script>
+
+}
+
+<div class="row">
+    <div class="col">
+        <div id="divMySpinner" class="text-center" hidden>
+            <div class="spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divStrumentoFinanziario"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divHoldingsList"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divMyModal"></div>
+    </div>
+</div>
+

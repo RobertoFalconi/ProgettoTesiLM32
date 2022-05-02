@@ -1,0 +1,193 @@
+﻿@model StrumentoFinanziarioViewModel;
+
+@{
+    ViewData["Title"] = "Stock Market";
+    TempData["Controller"] = "StockMarket";
+}
+
+@section scripts {
+
+<script>
+    var listSimboli = [];
+
+    function loadStrumentoFinanziario() {
+        let form = $('#formValidation');
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        let isValid = form.valid();
+        let Simbolo = $('#exampleDataList').val();
+        if (isValid) {
+            showMySpinner(true);
+            $.get({
+                url: "/StockMarket/_StrumentoFinanziario" + '?Simbolo=' + Simbolo,
+                cache: false
+            }).done(function (data) {
+                showMySpinner(false);
+                if (data.success != undefined && !data.success && data.isFreeCallEnd) {
+                    $('#datalistOptions').empty();
+                    $('#exampleDataList').attr("readonly", true);
+                    $('#btnCerca').attr("disabled", true);
+                    $('#triangolo').attr("hidden", false);
+                }
+                else if (data.success != undefined && !data.success && !data.isFreeCallEnd) {
+                    openMyModal("Errore", data.errorMsg);
+                }
+                else {
+                    $("#divStrumentoFinanziario").html(data);
+                }
+            }).fail(function (data) {
+            });
+        }
+    }
+
+    function addToWatchlist(simbolo) {
+        if (listSimboli.includes(simbolo)) {
+            openMyModal("Errore", "Lo strumento " + simbolo + " è già presente nella watchlist");
+        }
+        else {
+            listSimboli.push(simbolo);
+        }
+        showMySpinner(true);
+        $.get({
+            url: "/StockMarket/_Watchlist" + '?stringSimboli=' + listSimboli,
+            cache: false
+        }).done(function (data) {
+            showMySpinner(false);
+            if (data.success != undefined && !data.success && data.isFreeCallEnd) {
+                $('#datalistOptions').empty();
+                $('#exampleDataList').attr("readonly", true);
+                $('#btnCerca').attr("disabled", true);
+                $('#triangolo').attr("hidden", false);
+            }
+            else if (data.success != undefined && !data.success && !data.isFreeCallEnd) {
+                openMyModal("Errore", data.errorMsg);
+            }
+            else {
+                $("#divWatchlist").html(data);
+            }
+        }).fail(function (data) {
+        });
+    }
+
+    function addToHoldings(simbolo) {
+        showMySpinner(true);
+        let form = $('#formValidationStrumentoFinanziario');
+        $.validator.unobtrusive.parse(form);
+        form.validate();
+        let isValid = form.valid();
+        if (isValid) {
+            var toSend = form.serialize();
+            $.post("/Holdings/InsertHolding", toSend, 
+                function(data) {
+                    showMySpinner(false);
+                    if (data.success) {
+                        openMyModal("Successo", data.errorMsg);
+                    }
+                    else {
+                        openMyModal("Errore", data.errorMsg);
+                    }
+            }).fail(function() {
+                console.log("error");
+            });
+        }
+    }
+
+    function switchWatchlist(simbolo) {
+        $("#watchlist .active").addClass("text-white");
+        $("#watchlist .active").removeClass("active");
+        $("#nav-"+simbolo).addClass("active");
+        $("#nav-"+simbolo).removeClass("text-white");
+        $(".d-show").addClass("d-none");
+        $(".d-show").removeClass("d-show");
+        $("#body-"+simbolo).removeClass("d-none");
+        $("#body-"+simbolo).addClass("d-show");
+    }
+
+    $(document).ready(function () {
+        $("#formValidation").submit(function(){
+            loadStrumentoFinanziario();
+            return false;
+        });
+
+        $("#exampleDataList").keyup(function(event) {
+            if ($("#exampleDataList").attr('readonly') !== 'readonly') {
+                var value = $("#exampleDataList").val();
+                $.get({
+                    url: "/StockMarket/_GetApiAutocomplete/" + '?value=' + value,
+                    cache: false,
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (data.success != undefined && !data.success && data.isFreeCallEnd) {
+                        $('#datalistOptions').empty();
+                        $('#exampleDataList').attr("readonly", true);
+                        $('#btnCerca').attr("disabled", true);
+                        $('#triangolo').attr("hidden", false);
+                    }
+                    else if (data.success != undefined && !data.success && !data.isFreeCallEnd) {
+
+                    }
+                    else {
+                        $('#datalistOptions').empty();
+                        var json = JSON.parse(data);
+                        $('#datalistOptions').append("<option value='" + json.ResultSet.Result[0].name + " (" + json.ResultSet.Result[0].symbol + ")'>");
+                        $('#datalistOptions').append("<option value='" + json.ResultSet.Result[1].name + " (" + json.ResultSet.Result[1].symbol + ")'>");
+                        $('#datalistOptions').append("<option value='" + json.ResultSet.Result[2].name + " (" + json.ResultSet.Result[2].symbol + ")'>");
+                    }
+                }).fail(function (data) {
+                });
+            }
+        });
+    });
+
+</script>
+
+}
+
+<div class="row">
+    <div class="col">
+        <h3><i class="fa-solid fa-magnifying-glass"></i> Cerca</h3>
+        <form id="formValidation" class="p-3 mb-5 rounded-3 border shadow-lg">
+            <div class="form-group mb-3">
+                <label for="exampleDataList" class="form-label">Ricerca nei mercati</label>
+                <i class="fa-solid fa-triangle-exclamation" id="triangolo" hidden>Non sono disponibili ulteriori ricerche gratuite per oggi</i><input asp-for="Simbolo" class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Cerca titoli, ETF e altro...">
+                <datalist id="datalistOptions">
+                </datalist>
+                <span asp-validation-for="Simbolo" class="text-danger"></span>
+            </div>
+            <div>
+                <div class="form-group mb-3">
+                    <button type="button" class="btn btn-primary" onclick="loadStrumentoFinanziario();" id="btnCerca"><i class="fa-brands fa-searchengin"></i> Cerca informazioni</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divMySpinner" class="text-center" hidden>
+            <div class="spinner-grow" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divStrumentoFinanziario"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divWatchlist"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="divMyModal"></div>
+    </div>
+</div>
+

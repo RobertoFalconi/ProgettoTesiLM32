@@ -1,0 +1,103 @@
+﻿@model IReadOnlyList<StrumentoFinanziarioViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h3><i class="fa-solid fa-bookmark"></i> Watchlist</h3>
+<a type="button" class="btn btn-primary mb-2" href="/StockMarket/Download"><i class="fa-solid fa-download"></i> Download data</a>
+<div class="card text-center mb-5 rounded-3 border shadow-lg" id="watchlist">
+    <div class="card-header bg-dark-blue bg-gradient">
+        <ul class="nav nav-tabs card-header-tabs">
+            @{
+                var i = 0;
+            }
+            @foreach (var item in Model)
+            {
+                var nome = item.Nome?.Replace(".", "");
+                @if (i == 0)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="#!" onclick="switchWatchlist('@nome');" id="nav-@nome">@item.Nome</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" aria-current="false" href="#!" onclick="switchWatchlist('@nome');" id="nav-@nome">@item.Nome</a>
+                    </li>
+                }
+                i++;
+            }
+        </ul>
+    </div>
+    @{
+        i = 0;
+    }
+    @foreach (var item in Model)
+    {
+        var nome = item.Nome?.Replace(".", "");
+        if (i == 0)
+        {
+            <div class="card-body d-show" id="body-@nome">
+                <div class="row">
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-sack-dollar"></i> Total Revenue: @item.TotalRevenue</li>
+                            <li class="list-group-item"><i class="fa-solid fa-hand-holding-dollar"></i> Gross Profits: @item.GrossProfits</li>
+                            <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced"></i> Profit Margins: @item.ProfitMargins</li>
+                            <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced-flip"></i> Ebitda Margins: @item.EbitdaMargins</li>
+                        </ul>
+                    </div>
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-magnifying-glass-dollar"></i> Current Price: @item.CurrentPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-vault"></i> Target High Price: @item.TargetHighPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-piggy-bank"></i> Target Median Price: @item.TargetMedianPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-coins"></i> Target Low Price: @item.TargetLowPrice</li>
+                        </ul>
+                    </div>
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-money-bill-trend-up"></i> Earnings Growth: @item.EarningsGrowth</li>
+                            <li class="list-group-item"><i class="fa-solid fa-money-bill-wheat"></i> Revenue Growth: @item.RevenueGrowth</li>
+                            <li class="list-group-item"><i class="fa-solid fa-wallet"></i> Operating Cashflow: @item.OperatingCashflow</li>
+                            <li class="list-group-item"><i class="fa-solid fa-dollar-sign"></i> Financial Currency: @item.FinancialCurrency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card-body d-none" id="body-@nome">
+                <div class="row">
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-sack-dollar"></i> Total Revenue: @item.TotalRevenue</li>
+                            <li class="list-group-item"><i class="fa-solid fa-hand-holding-dollar"></i> Gross Profits: @item.GrossProfits</li>
+                            <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced"></i> Profit Margins: @item.ProfitMargins</li>
+                            <li class="list-group-item"><i class="fa-solid fa-scale-unbalanced-flip"></i> Ebitda Margins: @item.EbitdaMargins</li>
+                        </ul>
+                    </div>
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-magnifying-glass-dollar"></i> Current Price: @item.CurrentPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-vault"></i> Target High Price: @item.TargetHighPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-piggy-bank"></i> Target Median Price: @item.TargetMedianPrice</li>
+                            <li class="list-group-item"><i class="fa-solid fa-coins"></i> Target Low Price: @item.TargetLowPrice</li>
+                        </ul>
+                    </div>
+                    <div class="card col-lg-4">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="fa-solid fa-money-bill-trend-up"></i> Earnings Growth: @item.EarningsGrowth</li>
+                            <li class="list-group-item"><i class="fa-solid fa-money-bill-wheat"></i> Revenue Growth: @item.RevenueGrowth</li>
+                            <li class="list-group-item"><i class="fa-solid fa-wallet"></i> Operating Cashflow: @item.OperatingCashflow</li>
+                            <li class="list-group-item"><i class="fa-solid fa-dollar-sign"></i> Financial Currency: @item.FinancialCurrency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+        i++;
+    }
+</div>

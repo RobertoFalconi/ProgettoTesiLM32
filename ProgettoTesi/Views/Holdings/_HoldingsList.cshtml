@@ -1,0 +1,44 @@
+﻿@model IReadOnlyList<StrumentoFinanziarioViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h3><i class="fa-solid fa-wallet"></i> Holdings</h3>
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (Model.Count == 0)
+    {
+        <div class="row">
+            <div class="col">
+                <h5><i class="fa-solid fa-triangle-exclamation"></i> Non hai ancora nessuna holding</h5>
+            </div>
+        </div>
+    }
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-lg-4 mb-5">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="card-title">@item.Simbolo</h3>
+                        <p class="card-text">@item.Descrizione</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-start" onclick="getQuotazione('@item.Simbolo')"><i class="fa-solid fa-circle-info"></i> Quotazione</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-end" onclick="deleteHoldings('@item.Id')"><i class="fa-solid fa-trash-can"></i> Cancella</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <h5><i class="fa-solid fa-triangle-exclamation"></i> Registrati per salvare le tue holdings!</h5>
+        </div>
+    </div>
+}

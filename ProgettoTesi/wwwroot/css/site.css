@@ -1,0 +1,32 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 85px !important;
+    background-color: #f5f5f5 !important;
+}
+
+.mt-n1 {
+    margin-top: -5rem !important;
+}
+
+.bg-dark-blue {
+    --bs-bg-opacity: 1;
+    background-color: rgba(20, 32, 51, var(--bs-bg-opacity)) !important; /* #142035 */
+}
+
+.text-orange {
+    color: #fd7e14 !important;
+}
