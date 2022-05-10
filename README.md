@@ -3,8 +3,8 @@
 - Demo live preview: https://progettotesi.azurewebsites.net  
   
 # ASP.NET Core project with:  
-- .NET 6  
-- ASP.NET Core with Razor Pages pattern
+- ASP.NET Core with MVC and Razor Pages patterns
+- .NET 6 with API Gateway and Minimal APIs patterns 
 - Docker  
 - Configured NuGet for:
   - Entity Framework Core 
