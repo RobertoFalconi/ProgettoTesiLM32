@@ -7,7 +7,8 @@
 - .NET 6 with API Gateway and Minimal APIs patterns 
 - Docker  
 - Configured NuGet for:
-  - Entity Framework Core 
+  - Entity Framework Core and Dapper
+  - System Text JSON
   - Swashbuckle (Swagger)
 - Configured libman for:  
   - Bootstrap 5
