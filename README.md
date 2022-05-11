@@ -16,6 +16,8 @@
   - jQuery Validation Unobtrusive
   - FontAwesome
 - Configured Program.cs with middlewares and pipelines usage for:
+  - Kestrel Web Server
+  - HSTS
   - Azure SQL Database
   - Azure Functions
   - Azure App Service
