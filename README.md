@@ -4,11 +4,10 @@
   
 # ASP.NET Core project with:  
 - ASP.NET Core with MVC and Razor Pages patterns
-- .NET 6 with API Gateway and Minimal APIs patterns 
+- .NET 6 with API Gateway and Minimal APIs patterns with System Text JSON usage
 - Docker  
 - Configured NuGet for:
   - Entity Framework Core and Dapper
-  - System Text JSON
   - Swashbuckle (Swagger)
 - Configured libman for:  
   - Bootstrap 5
@@ -16,7 +15,7 @@
   - jQuery Validate
   - jQuery Validation Unobtrusive
   - FontAwesome
-- Powered by:
+- Configured Program.cs with middlewares and pipelines usage for:
   - Azure SQL Database
   - Azure Functions
   - Azure App Service
